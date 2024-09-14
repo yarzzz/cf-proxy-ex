@@ -613,7 +613,13 @@ async function handleRequest(request) {
 
   var actualUrlStr = url.pathname.substring(url.pathname.indexOf(str) + str.length) + url.search + url.hash;
   if (actualUrlStr == "") { //先返回引导界面
-    return getHTMLResponse(mainPage);
+    return new Response("404 page not found",{ status: 404 });
+    // return getHTMLResponse(mainPage);
+  } else if (pathname === '/robots.txt') {
+    const robots = `User-agent: *
+Disallow: /
+    `;
+   return new Response(robots,{ status: 200 });
   }
 
 
