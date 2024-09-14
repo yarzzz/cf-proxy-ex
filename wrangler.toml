@@ -1,0 +1,4 @@
+name = "cf-proxy-ex"
+main = "_worker.js"
+compatibility_date = "2024-05-24"
+node_compat = true
