@@ -686,18 +686,14 @@ Disallow: /
 
   //console.log(actualUrl);
 
-  try {
-    const response = await fetch(modifiedRequest);
-    if (response.status.toString().startsWith("3") && response.headers.get("Location") != null) {
-      //console.log(base_url + response.headers.get("Location"))
-      try {
-        return Response.redirect(thisProxyServerUrlHttps + new URL(response.headers.get("Location"), actualUrlStr).href, 301);
-      } catch {
-        return getHTMLResponse(redirectError + "<br>the redirect url:" + response.headers.get("Location") + ";the url you are now at:" + actualUrlStr);
-      }
+  const response = await fetch(modifiedRequest);
+  if (response.status.toString().startsWith("3") && response.headers.get("Location") != null) {
+    //console.log(base_url + response.headers.get("Location"))
+    try {
+      return Response.redirect(thisProxyServerUrlHttps + new URL(response.headers.get("Location"), actualUrlStr).href, 301);
+    } catch {
+      return getHTMLResponse(redirectError + "<br>the redirect url:" + response.headers.get("Location") + ";the url you are now at:" + actualUrlStr);
     }
-  } catch {
-    return new Response("can not fetch",{ status: 500 });
   }
 
   var modifiedResponse;
