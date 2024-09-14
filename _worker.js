@@ -615,7 +615,7 @@ async function handleRequest(request) {
   if (actualUrlStr == "") { //先返回引导界面
     return new Response("404 page not found",{ status: 404 });
     // return getHTMLResponse(mainPage);
-  } else if (actualUrlStr === '/robots.txt') {
+  } else if (actualUrlStr === 'robots.txt') {
     const robots = `User-agent: *
 Disallow: /
     `;
