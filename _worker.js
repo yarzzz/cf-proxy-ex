@@ -612,9 +612,9 @@ async function handleRequest(request) {
   //var siteOnly = url.pathname.substring(url.pathname.indexOf(str) + str.length);
 
   var actualUrlStr = url.pathname.substring(url.pathname.indexOf(str) + str.length) + url.search + url.hash;
-  console.log("actualUrlStr: " + actualUrlStr);
+  // console.log("actualUrlStr: " + actualUrlStr);
   if (actualUrlStr == "") { //先返回引导界面
-    return new Response("404 page not found",{ status: 404 });
+    return new Response("page not found",{ status: 404 });
     // return getHTMLResponse(mainPage);
   } else if (actualUrlStr === "robots.txt") {
     const robots = `User-agent: *
@@ -686,14 +686,18 @@ Disallow: /
 
   //console.log(actualUrl);
 
-  const response = await fetch(modifiedRequest);
-  if (response.status.toString().startsWith("3") && response.headers.get("Location") != null) {
-    //console.log(base_url + response.headers.get("Location"))
-    try {
-      return Response.redirect(thisProxyServerUrlHttps + new URL(response.headers.get("Location"), actualUrlStr).href, 301);
-    } catch {
-      getHTMLResponse(redirectError + "<br>the redirect url:" + response.headers.get("Location") + ";the url you are now at:" + actualUrlStr);
+  try {
+    const response = await fetch(modifiedRequest);
+    if (response.status.toString().startsWith("3") && response.headers.get("Location") != null) {
+      //console.log(base_url + response.headers.get("Location"))
+      try {
+        return Response.redirect(thisProxyServerUrlHttps + new URL(response.headers.get("Location"), actualUrlStr).href, 301);
+      } catch {
+        return getHTMLResponse(redirectError + "<br>the redirect url:" + response.headers.get("Location") + ";the url you are now at:" + actualUrlStr);
+      }
     }
+  } catch {
+    return new Response("can not fetch",{ status: 500 });
   }
 
   var modifiedResponse;
